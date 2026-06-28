@@ -1,8 +1,20 @@
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube, CreditCard, Shield, Truck } from 'lucide-react';
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube,
+  CreditCard,
+  Shield,
+  Truck,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import logo from '@/assets/logo.png';
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -15,9 +27,14 @@ export const Footer = () => {
           {/* Company Info */}
           <div className="space-y-5">
             <Link to="/" className="group flex items-center space-x-3 w-fit">
-              <div className="w-11 h-11 bg-[#D4AF37] rounded-xl flex items-center justify-center shadow-[0_10px_30px_rgba(212,175,55,0.25)] transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_14px_36px_rgba(212,175,55,0.35)]">
-                <span className="text-[#050505] font-bold text-xl">S</span>
+              <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-[#D4AF37]/35 bg-white shadow-[0_10px_30px_rgba(212,175,55,0.22)] transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_14px_36px_rgba(212,175,55,0.34)]">
+                <img
+                  src={logo}
+                  alt="SISAL logo"
+                  className="h-full w-full object-contain p-1"
+                />
               </div>
+
               <div className="leading-tight">
                 <span className="block font-bold text-2xl tracking-tight text-white">
                   SISAL
@@ -29,8 +46,9 @@ export const Footer = () => {
             </Link>
 
             <p className="text-white/60 text-sm leading-relaxed max-w-sm">
-              Your trusted destination for secure instant shopping and lifestyle essentials.
-              We deliver quality products with a refined experience and reliable service.
+              Your trusted destination for secure instant shopping and lifestyle
+              essentials. We deliver quality products with a refined experience
+              and reliable service.
             </p>
 
             <div className="flex items-center space-x-3">
@@ -140,15 +158,15 @@ export const Footer = () => {
             <div className="space-y-3 pt-2">
               <div className="flex items-center space-x-3 text-white/60 text-sm">
                 <Phone className="w-4 h-4 text-[#D4AF37]" />
-                <span>+1 (555) 123-4567</span>
+                <span>+977 980-1234567</span>
               </div>
               <div className="flex items-center space-x-3 text-white/60 text-sm">
                 <Mail className="w-4 h-4 text-[#D4AF37]" />
-                <span>support@sisal.com</span>
+                <span>support@sisal.com.np</span>
               </div>
               <div className="flex items-start space-x-3 text-white/60 text-sm">
                 <MapPin className="w-4 h-4 text-[#D4AF37] mt-0.5" />
-                <span>123 Commerce St, City, State 12345</span>
+                <span>Nepathya College, Bhairahawa, Rupandehi, Nepal</span>
               </div>
             </div>
           </div>

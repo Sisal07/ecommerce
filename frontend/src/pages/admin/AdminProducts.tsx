@@ -12,7 +12,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { mockProducts } from "@/data/mockData";
 import { baseURL } from "@/lib/api";
 import { adminProductSearch, getProducts } from "@/lib/services";
 import { IProduct } from "@/types/types";
@@ -21,78 +20,54 @@ import { Helmet } from "react-helmet-async";
 
 const AdminProducts = () => {
   const [searchTerm, setSearchTerm] = useState("");
-
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(false);
-
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
-
   const pageSize = 8;
   const totalPages = Math.ceil(count / pageSize);
 
-  function frontendPopulateProduct(newProduct: IProduct) {
-    setProducts([newProduct, ...products]);
-  }
-
-  function frontendUpdateProduct(id: number, obj: IProduct) {
-    setProducts((curr) =>
-      curr.map((product) => (product.id == id ? obj : product))
-    );
-  }
-
-  function frontendDeleteProduct(id: number) {
-    setProducts((items) => items.filter((item: IProduct) => item.id != id));
-  }
-
-  async function handleGetProducts(page = 1) {
+  // ---------- Unified fetch function ----------
+  const fetchProducts = async (pageNum: number, search: string = "") => {
     setLoading(true);
     try {
-      const response = await getProducts(page);
+      let response;
+      if (search.trim()) {
+        response = await adminProductSearch(pageNum, search);
+      } else {
+        response = await getProducts(pageNum);
+      }
       setProducts(response.results);
       setCount(response.count);
-      setPage(page);
+      setPage(pageNum);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
+  // ---------- Initial load ----------
   useEffect(() => {
-    handleGetProducts(1);
+    fetchProducts(1, "");
   }, []);
 
-  async function handleProductSearch(page = 1) {
-    setLoading(true);
-    try {
-      const response = await adminProductSearch(page, searchTerm);
-      setProducts(response.results);
-      setCount(response.count);
-      setPage(page);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
+  // ---------- Debounced search ----------
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      if (searchTerm) {
-        handleProductSearch(1);
-      }
-    }, 500); // debounce delay (500ms)
+      fetchProducts(1, searchTerm);
+    }, 500);
 
     return () => clearTimeout(delayDebounce);
   }, [searchTerm]);
 
-  const filteredProducts = mockProducts.filter(
-    (product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // ---------- Handlers for pagination ----------
+  const goToPage = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    fetchProducts(newPage, searchTerm);
+  };
 
+  // ---------- Helper functions ----------
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -100,176 +75,265 @@ const AdminProducts = () => {
     }).format(price);
   };
 
+  const frontendPopulateProduct = (newProduct: IProduct) => {
+    setProducts([newProduct, ...products]);
+  };
+
+  const frontendUpdateProduct = (id: number, obj: IProduct) => {
+    setProducts((curr) =>
+      curr.map((product) => (product.id === id ? obj : product))
+    );
+  };
+
+  const frontendDeleteProduct = (id: number) => {
+    setProducts((items) => items.filter((item: IProduct) => item.id !== id));
+  };
+
   return (
     <>
       <Helmet>
-        <title>Products Inventory | PurpleStore</title>
+        <title>Products Inventory | SISAL Admin</title>
       </Helmet>
 
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
+      <div className="space-y-6 font-['Inter','Poppins',sans-serif] text-[#F5F5F5]">
+        {/* Header */}
+        <div className="flex flex-col gap-5 rounded-[2rem] border border-[#C0C0C0]/12 bg-[#171717] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.35)] sm:flex-row sm:items-end sm:justify-between sm:p-8">
           <div>
-            <h1 className="text-3xl font-bold">Products</h1>
-            <p className="text-muted-foreground">
-              Manage your product inventory
+            <div className="mb-4 inline-flex rounded-full border border-[#C0C0C0]/18 bg-[#C0C0C0]/8 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#C0C0C0]">
+              Inventory Control
+            </div>
+            <h1 className="text-4xl font-bold tracking-tight text-[#F5F5F5]">
+              Products
+            </h1>
+            <p className="mt-2 text-sm leading-relaxed text-[#C0C0C0]/65">
+              Manage catalog items, stock levels, pricing, and product visibility.
             </p>
           </div>
+
           <AddProductDialog frontendPopulateProduct={frontendPopulateProduct} />
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Product Inventory</CardTitle>
-            <div className="flex items-center space-x-2 justify-between">
-              {/* <Search className="w-4 h-4 text-muted-foreground" /> */}
-              <Input
-                placeholder="Search products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="max-w-sm"
-              />
-              {/* <span className="px-4 py-1.5 text-sm font-semibold rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-md">
-      {products.length} Products
-    </span> */}
-              <span className="px-3 py-1 text-sm font-medium bg-primary/10 text-primary rounded-full">
-                {products.length} Products
-              </span>
+        {/* Table Card */}
+        <Card className="overflow-hidden rounded-[2rem] border border-[#C0C0C0]/12 bg-[#171717] text-[#F5F5F5] shadow-[0_24px_70px_rgba(0,0,0,0.3)]">
+          <CardHeader className="border-b border-[#C0C0C0]/10 px-6 py-5">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <CardTitle className="text-xl font-semibold tracking-tight text-[#F5F5F5]">
+                  Product Inventory
+                </CardTitle>
+                <p className="mt-1 text-sm text-[#C0C0C0]/55">
+                  Search, review, edit, and remove products from your catalog.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <Input
+                  placeholder="Search products..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="h-11 w-full rounded-full border-[#C0C0C0]/14 bg-[#0B0B0B]/70 px-4 text-[#F5F5F5] placeholder:text-[#C0C0C0]/35 transition-all duration-300 focus-visible:border-[#C0C0C0]/45 focus-visible:ring-2 focus-visible:ring-[#C0C0C0]/15 sm:w-72"
+                />
+
+                <span className="inline-flex h-11 items-center justify-center rounded-full border border-[#C0C0C0]/14 bg-[#C0C0C0]/8 px-4 text-sm font-medium text-[#C0C0C0]">
+                  {products.length} Products
+                </span>
+              </div>
             </div>
           </CardHeader>
 
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Product</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Stock</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Featured</TableHead> {/* ✅ New column */}
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {products.map((product) => (
-                  <TableRow key={product.id}>
-                    <TableCell>
-                      <div className="flex items-center space-x-3">
-                        <img
-                          src={`${baseURL}${product.image}`}
-                          alt={product.name}
-                          className="w-10 h-10 rounded-lg object-cover"
-                        />
-                        <div>
-                          <p className="font-medium">{product.name}</p>
-                          <p className="text-sm text-muted-foreground">
-                            ID: {product.sku}
-                          </p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="capitalize">
-                      {product.category}
-                    </TableCell>
-                    <TableCell>{formatPrice(product.price)}</TableCell>
-                    <TableCell>{product.quantity}</TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          product.quantity > 10
-                            ? "default"
-                            : product.quantity > 0
-                            ? "secondary"
-                            : "destructive"
-                        }
-                      >
-                        {product.quantity > 10
-                          ? "In Stock"
-                          : product.quantity > 0
-                          ? "Low Stock"
-                          : "Out of Stock"}
-                      </Badge>
-                    </TableCell>
-
-                    {/* ✅ Featured Column */}
-                    <TableCell>
-                      {product.featured ? (
-                        <Badge variant="default">Yes</Badge>
-                      ) : (
-                        <Badge variant="secondary">No</Badge>
-                      )}
-                    </TableCell>
-
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end space-x-2">
-                        {/* <Button variant="ghost" size="sm">
-                    <Edit className="w-4 h-4" />
-                  </Button> */}
-                        <AddProductDialog
-                          editProduct
-                          productId={product.id}
-                          frontendUpdateProduct={frontendUpdateProduct}
-                        />
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-destructive hover:text-destructive"
-                        >
-                          <DeleteDialog
-                            product={product}
-                            frontendDeleteProduct={frontendDeleteProduct}
-                          />
-                        </Button>
-                      </div>
-                    </TableCell>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-[#C0C0C0]/10 hover:bg-transparent">
+                    <TableHead className="px-6 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#C0C0C0]/55">
+                      Product
+                    </TableHead>
+                    <TableHead className="px-6 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#C0C0C0]/55">
+                      Category
+                    </TableHead>
+                    <TableHead className="px-6 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#C0C0C0]/55">
+                      Price
+                    </TableHead>
+                    <TableHead className="px-6 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#C0C0C0]/55">
+                      Stock
+                    </TableHead>
+                    <TableHead className="px-6 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#C0C0C0]/55">
+                      Status
+                    </TableHead>
+                    <TableHead className="px-6 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#C0C0C0]/55">
+                      Featured
+                    </TableHead>
+                    <TableHead className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-[0.16em] text-[#C0C0C0]/55">
+                      Actions
+                    </TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
 
-            {products.length === 0 && (
-              <div className="text-center py-8">
-                <p className="text-muted-foreground">
-                  No products found matching your search.
-                </p>
+                <TableBody>
+                  {loading ? (
+                    Array.from({ length: 6 }).map((_, index) => (
+                      <TableRow
+                        key={index}
+                        className="border-[#C0C0C0]/10 hover:bg-transparent"
+                      >
+                        {Array.from({ length: 7 }).map((__, cellIndex) => (
+                          <TableCell key={cellIndex} className="px-6 py-5">
+                            <div className="h-4 animate-pulse rounded-full bg-[#C0C0C0]/10" />
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  ) : (
+                    products.map((product) => (
+                      <TableRow
+                        key={product.id}
+                        className="border-[#C0C0C0]/10 transition-colors duration-300 hover:bg-[#2A2A2A]/45"
+                      >
+                        <TableCell className="px-6 py-5">
+                          <div className="flex items-center space-x-3">
+                            <img
+                              src={`${baseURL}${product.image}`}
+                              alt={product.name}
+                              className="h-12 w-12 rounded-2xl border border-[#C0C0C0]/12 object-cover shadow-[0_12px_30px_rgba(0,0,0,0.25)]"
+                            />
+                            <div>
+                              <p className="font-semibold text-[#F5F5F5]">
+                                {product.name}
+                              </p>
+                              <p className="text-sm text-[#C0C0C0]/50">
+                                ID: {product.sku}
+                              </p>
+                            </div>
+                          </div>
+                        </TableCell>
+
+                        <TableCell className="px-6 py-5 capitalize text-[#C0C0C0]/75">
+                          {product.category}
+                        </TableCell>
+
+                        <TableCell className="px-6 py-5 font-medium text-[#F5F5F5]">
+                          {formatPrice(product.price)}
+                        </TableCell>
+
+                        <TableCell className="px-6 py-5 text-[#C0C0C0]/75">
+                          {product.quantity}
+                        </TableCell>
+
+                        <TableCell className="px-6 py-5">
+                          <Badge
+                            variant={
+                              product.quantity > 10
+                                ? "default"
+                                : product.quantity > 0
+                                ? "secondary"
+                                : "destructive"
+                            }
+                            className="rounded-full border border-[#C0C0C0]/16 bg-[#C0C0C0]/10 px-3 py-1 text-xs font-medium text-[#F5F5F5]"
+                          >
+                            {product.quantity > 10
+                              ? "In Stock"
+                              : product.quantity > 0
+                              ? "Low Stock"
+                              : "Out of Stock"}
+                          </Badge>
+                        </TableCell>
+
+                        <TableCell className="px-6 py-5">
+                          {product.featured ? (
+                            <Badge
+                              variant="default"
+                              className="rounded-full border border-[#C0C0C0]/16 bg-[#C0C0C0]/14 px-3 py-1 text-xs font-medium text-[#F5F5F5]"
+                            >
+                              Yes
+                            </Badge>
+                          ) : (
+                            <Badge
+                              variant="secondary"
+                              className="rounded-full border border-[#C0C0C0]/12 bg-[#0B0B0B]/60 px-3 py-1 text-xs font-medium text-[#C0C0C0]/65"
+                            >
+                              No
+                            </Badge>
+                          )}
+                        </TableCell>
+
+                        <TableCell className="px-6 py-5 text-right">
+                          <div className="flex items-center justify-end space-x-2">
+                            <AddProductDialog
+                              editProduct
+                              productId={product.id}
+                              frontendUpdateProduct={frontendUpdateProduct}
+                            />
+
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="rounded-full text-[#C0C0C0]/70 transition-all duration-300 hover:bg-[#2A2A2A] hover:text-[#F5F5F5]"
+                            >
+                              <DeleteDialog
+                                product={product}
+                                frontendDeleteProduct={frontendDeleteProduct}
+                              />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+
+            {!loading && products.length === 0 && (
+              <div className="px-6 py-12 text-center">
+                <div className="mx-auto max-w-md rounded-3xl border border-[#C0C0C0]/12 bg-[#0B0B0B]/65 p-8">
+                  <p className="font-medium text-[#F5F5F5]">
+                    No products found
+                  </p>
+                  <p className="mt-2 text-sm text-[#C0C0C0]/60">
+                    No products found matching your search.
+                  </p>
+                </div>
               </div>
             )}
           </CardContent>
         </Card>
 
-        {/* --- Pagination Controls --- */}
-        <div className="flex justify-center space-x-2 mt-6">
-          {/* Previous button */}
+        {/* Pagination Controls */}
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
           <Button
             variant="outline"
             disabled={page === 1}
-            onClick={() => handleGetProducts(page - 1)}
+            onClick={() => goToPage(page - 1)}
+            className="rounded-full border-[#C0C0C0]/18 bg-[#171717] px-5 text-[#C0C0C0] transition-all duration-300 hover:border-[#C0C0C0]/45 hover:bg-[#2A2A2A] hover:text-[#F5F5F5] disabled:border-[#C0C0C0]/8 disabled:bg-[#171717]/60 disabled:text-[#C0C0C0]/25"
           >
             Previous
           </Button>
 
-          {/* Page number buttons */}
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
             <Button
               key={p}
               variant={p === page ? "default" : "outline"}
-              onClick={() => handleGetProducts(p)}
+              onClick={() => goToPage(p)}
+              className={`h-10 w-10 rounded-full transition-all duration-300 ${
+                p === page
+                  ? "bg-[#C0C0C0] text-[#0B0B0B] hover:bg-[#F5F5F5]"
+                  : "border-[#C0C0C0]/18 bg-[#171717] text-[#C0C0C0] hover:border-[#C0C0C0]/45 hover:bg-[#2A2A2A] hover:text-[#F5F5F5]"
+              }`}
             >
               {p}
             </Button>
           ))}
 
-          {/* Next button */}
           <Button
             variant="outline"
             disabled={page === totalPages}
-            onClick={() => handleGetProducts(page + 1)}
+            onClick={() => goToPage(page + 1)}
+            className="rounded-full border-[#C0C0C0]/18 bg-[#171717] px-5 text-[#C0C0C0] transition-all duration-300 hover:border-[#C0C0C0]/45 hover:bg-[#2A2A2A] hover:text-[#F5F5F5] disabled:border-[#C0C0C0]/8 disabled:bg-[#171717]/60 disabled:text-[#C0C0C0]/25"
           >
             Next
           </Button>
         </div>
-
-        {/* --- Pagination Controls ends --- */}
       </div>
     </>
   );

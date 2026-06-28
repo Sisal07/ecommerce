@@ -3,7 +3,7 @@ import { ShoppingBag } from "lucide-react";
 
 const CartLoader = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-white font-['Inter','Poppins',sans-serif] text-[#050505]">
       <motion.div
         animate={{ rotate: 360 }}
         transition={{
@@ -12,14 +12,14 @@ const CartLoader = () => {
           ease: "linear",
         }}
       >
-        <div className="relative">
-          <div className="absolute inset-0 rounded-full blur-xl bg-primary/20 animate-pulse" />
-          <ShoppingBag className="w-16 h-16 text-primary relative z-10" />
+        <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-[#D4AF37]/30 bg-[#050505] shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
+          <div className="absolute inset-0 rounded-full bg-[#D4AF37]/20 blur-xl animate-pulse" />
+          <ShoppingBag className="relative z-10 h-14 w-14 text-[#D4AF37]" />
         </div>
       </motion.div>
 
       <motion.p
-        className="mt-6 text-muted-foreground font-medium tracking-wide"
+        className="mt-6 font-medium tracking-wide text-[#050505]/60"
         animate={{ opacity: [0.4, 1, 0.4] }}
         transition={{
           repeat: Infinity,

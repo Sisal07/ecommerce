@@ -125,14 +125,21 @@ const CheckoutPage = () => {
 
   if (cart.cartitems.length === 0) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="flex min-h-screen flex-col bg-white font-['Inter','Poppins',sans-serif] text-[#050505]">
         <Navbar />
-        <div className="container mx-auto px-4 py-8 text-center">
-          <h1 className="text-2xl font-bold mb-4">Your cart is empty</h1>
-          <Link to="/">
-            <Button>Continue Shopping</Button>
-          </Link>
+        <div className="container mx-auto flex flex-1 items-center justify-center px-4 py-12 text-center">
+          <div className="w-full max-w-xl rounded-3xl border border-[#D4AF37]/25 bg-[#050505] px-6 py-12 text-white shadow-[0_24px_70px_rgba(0,0,0,0.22)]">
+            <h1 className="mb-4 text-2xl font-bold tracking-tight">
+              Your cart is empty
+            </h1>
+            <Link to="/">
+              <Button className="rounded-full bg-[#D4AF37] px-7 font-semibold text-[#050505] transition-all duration-300 hover:bg-[#F2D675]">
+                Continue Shopping
+              </Button>
+            </Link>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
@@ -140,74 +147,98 @@ const CheckoutPage = () => {
   return (
     <>
       <Helmet>
-        <title>Checkout | PurpleStore</title>
+        <title>Checkout | SISAL</title>
       </Helmet>
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-white font-['Inter','Poppins',sans-serif] text-[#050505]">
         <Navbar />
 
-        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
           <Link
             to="/cart"
-            className="inline-flex items-center text-muted-foreground hover:text-foreground mb-6"
+            className="mb-6 inline-flex items-center rounded-full border border-[#D4AF37]/25 bg-white px-4 py-2 text-sm font-medium text-[#050505]/65 transition-all duration-300 hover:border-[#D4AF37] hover:bg-[#050505] hover:text-[#D4AF37]"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Cart
           </Link>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             {/* Checkout Form */}
             <div className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Lock className="w-5 h-5" />
+              <Card className="overflow-hidden rounded-3xl border border-[#D4AF37]/20 bg-white shadow-[0_18px_45px_rgba(0,0,0,0.08)]">
+                <CardHeader className="border-b border-[#D4AF37]/15 bg-[#050505] px-6 py-5">
+                  <CardTitle className="flex items-center gap-2 text-xl font-semibold tracking-tight text-white">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10">
+                      <Lock className="h-5 w-5 text-[#D4AF37]" />
+                    </span>
                     Secure Checkout
                   </CardTitle>
                 </CardHeader>
 
-                <CardContent>
+                <CardContent className="px-6 py-6">
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     {/* Shipping Information */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold">
-                        Shipping Information
-                      </h3>
+                    <div className="space-y-5">
+                      <div>
+                        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#D4AF37]">
+                          Delivery Details
+                        </p>
+                        <h3 className="text-lg font-semibold tracking-tight text-[#050505]">
+                          Shipping Information
+                        </h3>
+                      </div>
 
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="firstName">First Name</Label>
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="firstName"
+                            className="text-sm text-[#050505]/70"
+                          >
+                            First Name
+                          </Label>
                           <Input
                             id="firstName"
                             {...register("firstName", {
                               required: "First name is required",
                             })}
+                            className="h-11 rounded-xl border-[#D4AF37]/25 bg-white text-[#050505] transition-all duration-300 focus-visible:border-[#D4AF37] focus-visible:ring-2 focus-visible:ring-[#D4AF37]/20"
                           />
                           {errors.firstName && (
-                            <p className="text-red-500 text-sm mt-1">
+                            <p className="mt-1 text-sm text-[#B45309]">
                               {errors.firstName.message}
                             </p>
                           )}
                         </div>
 
-                        <div>
-                          <Label htmlFor="lastName">Last Name</Label>
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="lastName"
+                            className="text-sm text-[#050505]/70"
+                          >
+                            Last Name
+                          </Label>
                           <Input
                             id="lastName"
                             {...register("lastName", {
                               required: "Last name is required",
                             })}
+                            className="h-11 rounded-xl border-[#D4AF37]/25 bg-white text-[#050505] transition-all duration-300 focus-visible:border-[#D4AF37] focus-visible:ring-2 focus-visible:ring-[#D4AF37]/20"
                           />
                           {errors.lastName && (
-                            <p className="text-red-500 text-sm mt-1">
+                            <p className="mt-1 text-sm text-[#B45309]">
                               {errors.lastName.message}
                             </p>
                           )}
                         </div>
                       </div>
 
-                      <div>
-                        <Label htmlFor="email">Email</Label>
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="email"
+                          className="text-sm text-[#050505]/70"
+                        >
+                          Email
+                        </Label>
                         <Input
                           id="email"
                           type="email"
@@ -218,70 +249,95 @@ const CheckoutPage = () => {
                               message: "Enter a valid email address",
                             },
                           })}
+                          className="h-11 rounded-xl border-[#D4AF37]/25 bg-white text-[#050505] transition-all duration-300 focus-visible:border-[#D4AF37] focus-visible:ring-2 focus-visible:ring-[#D4AF37]/20"
                         />
                         {errors.email && (
-                          <p className="text-red-500 text-sm mt-1">
+                          <p className="mt-1 text-sm text-[#B45309]">
                             {errors.email.message}
                           </p>
                         )}
                       </div>
 
-                      <div>
-                        <Label htmlFor="address">Address</Label>
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="address"
+                          className="text-sm text-[#050505]/70"
+                        >
+                          Address
+                        </Label>
                         <Input
                           id="address"
                           {...register("address", {
                             required: "Address is required",
                           })}
+                          className="h-11 rounded-xl border-[#D4AF37]/25 bg-white text-[#050505] transition-all duration-300 focus-visible:border-[#D4AF37] focus-visible:ring-2 focus-visible:ring-[#D4AF37]/20"
                         />
                         {errors.address && (
-                          <p className="text-red-500 text-sm mt-1">
+                          <p className="mt-1 text-sm text-[#B45309]">
                             {errors.address.message}
                           </p>
                         )}
                       </div>
 
-                      <div className="grid grid-cols-3 gap-4">
-                        <div>
-                          <Label htmlFor="city">City</Label>
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="city"
+                            className="text-sm text-[#050505]/70"
+                          >
+                            City
+                          </Label>
                           <Input
                             id="city"
                             {...register("city", {
                               required: "City is required",
                             })}
+                            className="h-11 rounded-xl border-[#D4AF37]/25 bg-white text-[#050505] transition-all duration-300 focus-visible:border-[#D4AF37] focus-visible:ring-2 focus-visible:ring-[#D4AF37]/20"
                           />
                           {errors.city && (
-                            <p className="text-red-500 text-sm mt-1">
+                            <p className="mt-1 text-sm text-[#B45309]">
                               {errors.city.message}
                             </p>
                           )}
                         </div>
 
-                        <div>
-                          <Label htmlFor="state">State</Label>
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="state"
+                            className="text-sm text-[#050505]/70"
+                          >
+                            State
+                          </Label>
                           <Input
                             id="state"
                             {...register("state", {
                               required: "State is required",
                             })}
+                            className="h-11 rounded-xl border-[#D4AF37]/25 bg-white text-[#050505] transition-all duration-300 focus-visible:border-[#D4AF37] focus-visible:ring-2 focus-visible:ring-[#D4AF37]/20"
                           />
                           {errors.state && (
-                            <p className="text-red-500 text-sm mt-1">
+                            <p className="mt-1 text-sm text-[#B45309]">
                               {errors.state.message}
                             </p>
                           )}
                         </div>
 
-                        <div>
-                          <Label htmlFor="zipCode">ZIP Code</Label>
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="zipCode"
+                            className="text-sm text-[#050505]/70"
+                          >
+                            ZIP Code
+                          </Label>
                           <Input
                             id="zipCode"
                             {...register("zipCode", {
                               required: "ZIP Code is required",
                             })}
+                            className="h-11 rounded-xl border-[#D4AF37]/25 bg-white text-[#050505] transition-all duration-300 focus-visible:border-[#D4AF37] focus-visible:ring-2 focus-visible:ring-[#D4AF37]/20"
                           />
                           {errors.zipCode && (
-                            <p className="text-red-500 text-sm mt-1">
+                            <p className="mt-1 text-sm text-[#B45309]">
                               {errors.zipCode.message}
                             </p>
                           )}
@@ -292,11 +348,11 @@ const CheckoutPage = () => {
                     <Button
                       type="submit"
                       size="lg"
-                      className="w-full"
+                      className="w-full rounded-full bg-[#D4AF37] text-base font-semibold text-[#050505] transition-all duration-300 hover:bg-[#F2D675] hover:shadow-[0_14px_30px_rgba(212,175,55,0.25)] disabled:cursor-not-allowed disabled:bg-black/10 disabled:text-black/35"
                       disabled={isProcessing}
                     >
                       {isProcessing && (
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       )}
                       {isProcessing
                         ? "Processing..."
@@ -309,67 +365,82 @@ const CheckoutPage = () => {
 
             {/* Order Summary */}
             <div>
-              <Card className="sticky top-24">
-                <CardHeader>
-                  <CardTitle>Order Summary</CardTitle>
+              <Card className="sticky top-24 overflow-hidden rounded-3xl border border-[#D4AF37]/25 bg-[#050505] text-white shadow-[0_24px_70px_rgba(0,0,0,0.22)]">
+                <CardHeader className="border-b border-[#D4AF37]/15 px-6 py-5">
+                  <CardTitle className="text-xl font-semibold tracking-tight text-white">
+                    Order Summary
+                  </CardTitle>
                 </CardHeader>
 
-                <CardContent className="space-y-4">
-                  <div className="space-y-3 max-h-64 overflow-y-auto">
+                <CardContent className="space-y-5 px-6 py-6">
+                  <div className="max-h-64 space-y-3 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-[#D4AF37]/40 hover:scrollbar-thumb-[#D4AF37]/70 scrollbar-track-transparent">
                     {cart.cartitems.map((item) => (
-                      <div key={item.id} className="flex items-center gap-3">
+                      <div
+                        key={item.id}
+                        className="flex items-center gap-3 rounded-2xl border border-[#D4AF37]/15 bg-white/[0.04] p-3"
+                      >
                         <img
                           src={`${baseURL}${item.product.image}`}
                           alt={item.product.name}
-                          className="w-12 h-12 object-cover rounded"
+                          className="h-14 w-14 rounded-xl border border-[#D4AF37]/20 object-cover"
                         />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium text-white">
                             {item.product.name}
                           </p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-white/50">
                             Qty: {item.quantity}
                           </p>
                         </div>
-                        <p className="text-sm font-medium">
+                        <p className="text-sm font-semibold text-[#D4AF37]">
                           {formatPrice(item.product.price * item.quantity)}
                         </p>
                       </div>
                     ))}
                   </div>
 
-                  <Separator />
+                  <Separator className="bg-[#D4AF37]/20" />
 
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
+                  <div className="space-y-3">
+                    <div className="flex justify-between text-sm text-white/60">
                       <span>Subtotal ({cartitemCount} items)</span>
-                      <span>{formatPrice(cartTotal)}</span>
-                    </div>
-
-                    <div className="flex justify-between text-sm">
-                      <span>Shipping</span>
-                      <span className={shipping === 0 ? "text-success" : ""}>
-                        {shipping === 0
-                          ? "FREE"
-                          : formatPrice(shipping)}
+                      <span className="font-medium text-white">
+                        {formatPrice(cartTotal)}
                       </span>
                     </div>
 
-                    <div className="flex justify-between text-sm">
-                      <span>Tax</span>
-                      <span>{formatPrice(tax)}</span>
+                    <div className="flex justify-between text-sm text-white/60">
+                      <span>Shipping</span>
+                      <span
+                        className={
+                          shipping === 0
+                            ? "font-medium text-[#D4AF37]"
+                            : "font-medium text-white"
+                        }
+                      >
+                        {shipping === 0 ? "FREE" : formatPrice(shipping)}
+                      </span>
                     </div>
 
-                    <Separator />
+                    <div className="flex justify-between text-sm text-white/60">
+                      <span>Tax</span>
+                      <span className="font-medium text-white">
+                        {formatPrice(tax)}
+                      </span>
+                    </div>
 
-                    <div className="flex justify-between text-lg font-bold">
+                    <Separator className="bg-[#D4AF37]/20" />
+
+                    <div className="flex justify-between text-lg font-bold text-white">
                       <span>Total</span>
-                      <span>{formatPrice(finalTotal)}</span>
+                      <span className="text-[#D4AF37]">
+                        {formatPrice(finalTotal)}
+                      </span>
                     </div>
                   </div>
 
-                  <div className="bg-muted/50 p-3 rounded-lg text-sm text-center">
-                    <Lock className="w-4 h-4 inline mr-2" />
+                  <div className="rounded-2xl border border-[#D4AF37]/20 bg-[#D4AF37]/10 p-3 text-center text-sm text-white/70">
+                    <Lock className="mr-2 inline h-4 w-4 text-[#D4AF37]" />
                     Your payment information is secure and encrypted
                   </div>
                 </CardContent>

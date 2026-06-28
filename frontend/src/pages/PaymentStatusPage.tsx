@@ -61,32 +61,40 @@ const PaymentStatusPage = () => {
   return (
     <>
       <Helmet>
-        <title>PaymentStatus | PurpleStore</title>
+        <title>Payment Status | SISAL</title>
       </Helmet>
 
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex flex-col">
+      <div className="flex min-h-screen flex-col bg-white font-['Inter','Poppins',sans-serif] text-[#050505]">
         <Navbar />
-        <div className="flex-1 flex items-center justify-center p-4 py-16">
-          <Card className="w-full max-w-md border-primary/20 shadow-lg">
-            <CardContent className="pt-12 pb-8 px-8">
-              <div className="flex flex-col items-center text-center space-y-6">
+
+        <div className="relative flex flex-1 items-center justify-center overflow-hidden px-4 py-16">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.16),transparent_34%),linear-gradient(180deg,#FFFFFF_0%,#FAFAFA_100%)]" />
+
+          <Card className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[#D4AF37]/25 bg-[#050505] text-white shadow-[0_24px_70px_rgba(0,0,0,0.24)]">
+            <CardContent className="px-8 pb-8 pt-12">
+              <div className="flex flex-col items-center space-y-6 text-center">
                 {paymentStatus === "pending" ? (
                   <>
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full" />
-                      <Loader2 className="w-20 h-20 text-primary relative animate-spin" />
+                    <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10">
+                      <div className="absolute inset-0 rounded-full bg-[#D4AF37]/20 blur-2xl" />
+                      <Loader2 className="relative h-20 w-20 animate-spin text-[#D4AF37]" />
                     </div>
+
                     <div className="space-y-2">
-                      <h1 className="text-3xl font-bold text-foreground">
+                      <h1 className="text-3xl font-bold tracking-tight text-white">
                         Processing Payment
                       </h1>
-                      <p className="text-muted-foreground text-lg">
+                      <p className="text-lg text-white/60">
                         Please wait while we confirm your payment
                       </p>
                     </div>
+
                     <div className="w-full space-y-3 pt-4">
-                      <Progress value={66} className="w-full" />
-                      <p className="text-sm text-muted-foreground">
+                      <Progress
+                        value={66}
+                        className="h-2 w-full overflow-hidden rounded-full bg-white/10 [&>div]:bg-[#D4AF37]"
+                      />
+                      <p className="text-sm leading-relaxed text-white/55">
                         This usually takes just a few moments. Please don't
                         close this page.
                       </p>
@@ -94,65 +102,87 @@ const PaymentStatusPage = () => {
                   </>
                 ) : paymentStatus == "success" ? (
                   <>
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full" />
-                      <CheckCircle className="w-20 h-20 text-primary relative" />
+                    <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10">
+                      <div className="absolute inset-0 rounded-full bg-[#D4AF37]/20 blur-2xl" />
+                      <CheckCircle className="relative h-20 w-20 text-[#D4AF37]" />
                     </div>
+
                     <div className="space-y-2">
-                      <h1 className="text-3xl font-bold text-foreground">
+                      <h1 className="text-3xl font-bold tracking-tight text-white">
                         Payment Successful!
                       </h1>
-                      <p className="text-muted-foreground text-lg">
+                      <p className="text-lg text-white/60">
                         Thank you for your purchase
                       </p>
                     </div>
+
                     <div className="w-full space-y-3 pt-4">
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm leading-relaxed text-white/55">
                         Your order has been confirmed and will be processed
                         shortly. You'll receive a confirmation email with your
                         order details.
                       </p>
                     </div>
-                    <div className="flex flex-col sm:flex-row gap-3 w-full pt-4">
-                      <Button asChild className="flex-1">
+
+                    <div className="flex w-full flex-col gap-3 pt-4 sm:flex-row">
+                      <Button
+                        asChild
+                        className="flex-1 rounded-full bg-[#D4AF37] font-semibold text-[#050505] transition-all duration-300 hover:bg-[#F2D675] hover:shadow-[0_12px_28px_rgba(212,175,55,0.24)]"
+                      >
                         <Link to="/orders">
-                          <ShoppingBag className="w-4 h-4 mr-2" />
+                          <ShoppingBag className="mr-2 h-4 w-4" />
                           View Orders
                         </Link>
                       </Button>
-                      <Button asChild variant="outline" className="flex-1">
+
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="flex-1 rounded-full border-[#D4AF37]/35 bg-transparent text-[#D4AF37] transition-all duration-300 hover:border-[#D4AF37] hover:bg-[#D4AF37]/10 hover:text-[#F2D675]"
+                      >
                         <Link to="/products">Continue Shopping</Link>
                       </Button>
                     </div>
                   </>
                 ) : (
                   <>
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-destructive/20 blur-2xl rounded-full" />
-                      <XCircle className="w-20 h-20 text-destructive relative" />
+                    <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-white/15 bg-white/[0.06]">
+                      <div className="absolute inset-0 rounded-full bg-white/15 blur-2xl" />
+                      <XCircle className="relative h-20 w-20 text-white/80" />
                     </div>
+
                     <div className="space-y-2">
-                      <h1 className="text-3xl font-bold text-foreground">
+                      <h1 className="text-3xl font-bold tracking-tight text-white">
                         Payment Failed
                       </h1>
-                      <p className="text-muted-foreground text-lg">
+                      <p className="text-lg text-white/60">
                         Something went wrong
                       </p>
                     </div>
+
                     <div className="w-full space-y-3 pt-4">
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm leading-relaxed text-white/55">
                         We couldn't process your payment. Please check your
                         payment details and try again. If the problem persists,
                         contact your bank or try a different payment method.
                       </p>
                     </div>
-                    <div className="flex flex-col sm:flex-row gap-3 w-full pt-4">
-                      <Button asChild className="flex-1">
+
+                    <div className="flex w-full flex-col gap-3 pt-4 sm:flex-row">
+                      <Button
+                        asChild
+                        className="flex-1 rounded-full bg-[#D4AF37] font-semibold text-[#050505] transition-all duration-300 hover:bg-[#F2D675] hover:shadow-[0_12px_28px_rgba(212,175,55,0.24)]"
+                      >
                         <Link to="/checkout">Try Again</Link>
                       </Button>
-                      <Button asChild variant="outline" className="flex-1">
+
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="flex-1 rounded-full border-[#D4AF37]/35 bg-transparent text-[#D4AF37] transition-all duration-300 hover:border-[#D4AF37] hover:bg-[#D4AF37]/10 hover:text-[#F2D675]"
+                      >
                         <Link to="/cart">
-                          <ArrowLeft className="w-4 h-4 mr-2" />
+                          <ArrowLeft className="mr-2 h-4 w-4" />
                           Back to Cart
                         </Link>
                       </Button>
@@ -160,12 +190,12 @@ const PaymentStatusPage = () => {
                   </>
                 )}
 
-                <div className="pt-6 border-t w-full">
+                <div className="w-full border-t border-[#D4AF37]/15 pt-6">
                   <Link
                     to="/"
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center"
+                    className="inline-flex items-center text-sm text-white/55 transition-colors duration-300 hover:text-[#D4AF37]"
                   >
-                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    <ArrowLeft className="mr-2 h-4 w-4" />
                     Return to Home
                   </Link>
                 </div>
@@ -173,6 +203,7 @@ const PaymentStatusPage = () => {
             </CardContent>
           </Card>
         </div>
+
         <Footer />
       </div>
     </>

@@ -67,49 +67,54 @@ const CartitemCard = ({ item }: Props) => {
   return (
     <div
       key={item.id}
-      className="flex items-center gap-4 py-4 border-b last:border-b-0"
+      className="group flex flex-col gap-4 border-b border-[#D4AF37]/15 py-5 font-['Inter','Poppins',sans-serif] transition-all duration-300 last:border-b-0 sm:flex-row sm:items-center"
     >
       <img
         src={`${baseURL}${item.product.image}`}
         alt={item.product.name}
-        className="w-20 h-20 object-cover rounded-lg"
+        className="h-24 w-24 rounded-2xl border border-[#D4AF37]/20 object-cover shadow-[0_12px_30px_rgba(0,0,0,0.16)] transition-transform duration-300 group-hover:scale-[1.03]"
       />
 
-      <div className="flex-1 min-w-0">
-        <h3 className="font-semibold truncate">{item.product.name}</h3>
-        <p className="text-sm text-muted-foreground capitalize">
+      <div className="min-w-0 flex-1">
+        <h3 className="truncate text-base font-semibold tracking-tight text-[#050505] transition-colors duration-300 group-hover:text-[#D4AF37]">
+          {item.product.name}
+        </h3>
+        <p className="mt-1 text-sm capitalize text-[#050505]/50">
           {item.product.category}
         </p>
-        <p className="text-lg font-bold text-primary">
+        <p className="mt-2 text-lg font-bold text-[#D4AF37]">
           {formatPrice(item.product.price)}
         </p>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 rounded-full border border-[#D4AF37]/20 bg-[#050505] p-1 shadow-[0_10px_24px_rgba(0,0,0,0.12)]">
         <Button
           variant="outline"
           size="icon"
-          className="disabled:cursor-not-allowed"
+          className="h-9 w-9 rounded-full border-[#D4AF37]/25 bg-transparent text-white/70 transition-all duration-300 hover:border-[#D4AF37] hover:bg-[#D4AF37]/10 hover:text-[#D4AF37] disabled:cursor-not-allowed disabled:border-white/10 disabled:text-white/25"
           disabled={loader || quantity <= 1}
           onClick={handleDecreaseQuantity}
         >
-          <Minus className="w-4 h-4" />
+          <Minus className="h-4 w-4" />
         </Button>
 
-        <span className="w-12 text-center font-medium">{quantity}</span>
+        <span className="w-10 text-center text-sm font-semibold text-[#D4AF37]">
+          {quantity}
+        </span>
 
         <Button
           variant="outline"
           size="icon"
+          className="h-9 w-9 rounded-full border-[#D4AF37]/25 bg-transparent text-white/70 transition-all duration-300 hover:border-[#D4AF37] hover:bg-[#D4AF37]/10 hover:text-[#D4AF37] disabled:cursor-not-allowed disabled:border-white/10 disabled:text-white/25"
           disabled={loader}
           onClick={handleIncreaseQuantity}
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="h-4 w-4" />
         </Button>
       </div>
 
-      <div className="text-right">
-        <p className="font-bold">
+      <div className="flex items-center justify-between gap-3 sm:min-w-[120px] sm:flex-col sm:items-end sm:text-right">
+        <p className="text-lg font-bold text-[#050505]">
           {formatPrice(item.product.price * item.quantity)}
         </p>
 

@@ -22,6 +22,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
+import logo from "@/assets/logo.png";
 
 // ✅ Active Link Helper
 const NavLinkItem = ({
@@ -43,9 +44,7 @@ const NavLinkItem = ({
       to={to}
       onClick={onClick}
       className={`text-sm font-medium transition-all duration-300 ${
-        isActive
-          ? "text-[#D4AF37]"
-          : "text-white/70 hover:text-[#D4AF37]"
+        isActive ? "text-[#D4AF37]" : "text-white/70 hover:text-[#D4AF37]"
       } ${className}`}
     >
       {children}
@@ -81,8 +80,12 @@ export const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="group flex items-center space-x-3">
-            <div className="w-10 h-10 bg-[#D4AF37] rounded-xl flex items-center justify-center shadow-[0_8px_24px_rgba(212,175,55,0.28)] transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_12px_30px_rgba(212,175,55,0.38)]">
-              <span className="text-[#050505] font-bold text-xl">S</span>
+            <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl border border-[#D4AF37]/35 bg-white shadow-[0_8px_24px_rgba(212,175,55,0.22)] transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_12px_30px_rgba(212,175,55,0.34)]">
+              <img
+                src={logo}
+                alt="SISAL logo"
+                className="h-full w-full object-contain p-1"
+              />
             </div>
 
             <div className="leading-tight">

@@ -63,15 +63,44 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <p className="text-center py-8 text-muted-foreground">
-        Loading dashboard data...
-      </p>
+      <div className="min-h-[70vh] bg-[#0B0B0B] px-4 py-8 font-['Inter','Poppins',sans-serif] text-[#F5F5F5]">
+        <div className="mx-auto max-w-7xl space-y-8">
+          <div className="space-y-3">
+            <div className="h-4 w-32 animate-pulse rounded-full bg-[#C0C0C0]/20" />
+            <div className="h-10 w-64 animate-pulse rounded-2xl bg-[#C0C0C0]/15" />
+            <div className="h-4 w-80 animate-pulse rounded-full bg-[#C0C0C0]/10" />
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div
+                key={index}
+                className="h-36 animate-pulse rounded-3xl border border-[#C0C0C0]/10 bg-[#171717] shadow-[0_24px_70px_rgba(0,0,0,0.35)]"
+              />
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <div className="h-80 animate-pulse rounded-3xl border border-[#C0C0C0]/10 bg-[#171717]" />
+            <div className="h-80 animate-pulse rounded-3xl border border-[#C0C0C0]/10 bg-[#171717]" />
+          </div>
+        </div>
+      </div>
     );
   }
 
   if (!stats) {
     return (
-      <p className="text-center py-8 text-red-500">Failed to load dashboard.</p>
+      <div className="min-h-[70vh] bg-[#0B0B0B] px-4 py-12 font-['Inter','Poppins',sans-serif] text-[#F5F5F5]">
+        <div className="mx-auto max-w-xl rounded-3xl border border-[#C0C0C0]/15 bg-[#171717] p-8 text-center shadow-[0_24px_70px_rgba(0,0,0,0.35)]">
+          <p className="text-lg font-semibold text-[#F5F5F5]">
+            Failed to load dashboard.
+          </p>
+          <p className="mt-2 text-sm text-[#C0C0C0]/65">
+            Please refresh the page or try again shortly.
+          </p>
+        </div>
+      </div>
     );
   }
 
@@ -105,127 +134,191 @@ const AdminDashboard = () => {
   return (
     <>
       <Helmet>
-        <title>Dashboard | PurpleStore</title>
+        <title>Dashboard | SISAL Admin</title>
       </Helmet>
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">
-            Welcome to your admin dashboard
-          </p>
-        </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {statCards.map((stat) => {
-            const Icon = stat.icon;
-            return (
-              <Card key={stat.title}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
-                    {stat.title}
-                  </CardTitle>
-                  <Icon className="w-5 h-5 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{stat.value}</div>
-                  <p className="text-xs text-muted-foreground">
-                    {stat.description}
-                  </p>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+      <div className="min-h-screen bg-[#0B0B0B] px-4 py-8 font-['Inter','Poppins',sans-serif] text-[#F5F5F5] sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl space-y-8">
+          <div className="overflow-hidden rounded-[2rem] border border-[#C0C0C0]/12 bg-[#171717] shadow-[0_30px_90px_rgba(0,0,0,0.45)]">
+            <div className="relative p-6 sm:p-8">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(192,192,192,0.14),transparent_34%),linear-gradient(135deg,rgba(245,245,245,0.06),transparent_42%)]" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Recent Orders */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Orders</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {stats.recent_orders.length === 0 ? (
-                  <p className="text-muted-foreground">
-                    No recent orders found.
+              <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                  <div className="mb-4 inline-flex items-center rounded-full border border-[#C0C0C0]/18 bg-[#C0C0C0]/8 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#C0C0C0]">
+                    Enterprise Control Center
+                  </div>
+
+                  <h1 className="text-4xl font-bold tracking-tight text-[#F5F5F5] sm:text-5xl">
+                    Dashboard
+                  </h1>
+
+                  <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#C0C0C0]/65 sm:text-base">
+                    Monitor performance, revenue, stock health, and recent
+                    activity across the SISAL administration workspace.
                   </p>
-                ) : (
-                  stats.recent_orders.map((order) => (
-                    <div
-                      key={order.id}
-                      className="flex items-center justify-between"
-                    >
-                      <div>
-                        <p className="font-medium">{order.sku}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {new Date(order.created_at).toLocaleDateString()}
-                        </p>
+                </div>
+
+                <div className="flex items-center gap-3 rounded-2xl border border-[#C0C0C0]/12 bg-[#0B0B0B]/70 px-4 py-3 backdrop-blur">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#C0C0C0]/18 bg-[#C0C0C0]/10">
+                    <Users className="h-5 w-5 text-[#C0C0C0]" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-[#C0C0C0]/55">Workspace</p>
+                    <p className="text-sm font-semibold text-[#F5F5F5]">
+                      SISAL Admin
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {statCards.map((stat) => {
+              const Icon = stat.icon;
+              return (
+                <Card
+                  key={stat.title}
+                  className="group overflow-hidden rounded-3xl border border-[#C0C0C0]/12 bg-[#171717] text-[#F5F5F5] shadow-[0_24px_70px_rgba(0,0,0,0.28)] transition-all duration-300 hover:-translate-y-1 hover:border-[#C0C0C0]/35 hover:shadow-[0_30px_90px_rgba(0,0,0,0.4)]"
+                >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 px-6 pb-3 pt-6">
+                    <CardTitle className="text-sm font-medium text-[#C0C0C0]/65">
+                      {stat.title}
+                    </CardTitle>
+                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#C0C0C0]/14 bg-[#C0C0C0]/8 transition-all duration-300 group-hover:border-[#C0C0C0]/35 group-hover:bg-[#C0C0C0]/12">
+                      <Icon className="h-5 w-5 text-[#C0C0C0]" />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="px-6 pb-6">
+                    <div className="text-3xl font-bold tracking-tight text-[#F5F5F5]">
+                      {stat.value}
+                    </div>
+                    <p className="mt-2 text-xs text-[#C0C0C0]/55">
+                      {stat.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {/* Recent Orders */}
+            <Card className="overflow-hidden rounded-3xl border border-[#C0C0C0]/12 bg-[#171717] text-[#F5F5F5] shadow-[0_24px_70px_rgba(0,0,0,0.28)]">
+              <CardHeader className="border-b border-[#C0C0C0]/10 px-6 py-5">
+                <CardTitle className="flex items-center justify-between">
+                  <span className="text-xl font-semibold tracking-tight">
+                    Recent Orders
+                  </span>
+                  <span className="rounded-full border border-[#C0C0C0]/14 bg-[#C0C0C0]/8 px-3 py-1 text-xs font-medium text-[#C0C0C0]">
+                    Live feed
+                  </span>
+                </CardTitle>
+              </CardHeader>
+
+              <CardContent className="px-6 py-5">
+                <div className="space-y-3">
+                  {stats.recent_orders.length === 0 ? (
+                    <div className="rounded-2xl border border-[#C0C0C0]/10 bg-[#0B0B0B]/70 p-6 text-center">
+                      <p className="text-sm text-[#C0C0C0]/65">
+                        No recent orders found.
+                      </p>
+                    </div>
+                  ) : (
+                    stats.recent_orders.map((order) => (
+                      <div
+                        key={order.id}
+                        className="flex flex-col gap-3 rounded-2xl border border-[#C0C0C0]/10 bg-[#0B0B0B]/55 p-4 transition-all duration-300 hover:border-[#C0C0C0]/28 hover:bg-[#2A2A2A]/45 sm:flex-row sm:items-center sm:justify-between"
+                      >
+                        <div>
+                          <p className="font-semibold tracking-tight text-[#F5F5F5]">
+                            {order.sku}
+                          </p>
+                          <p className="mt-1 text-sm text-[#C0C0C0]/55">
+                            {new Date(order.created_at).toLocaleDateString()}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <Badge
+                            variant={
+                              order.status === "success"
+                                ? "default"
+                                : order.status === "failed"
+                                ? "destructive"
+                                : "secondary"
+                            }
+                            className="rounded-full border border-[#C0C0C0]/16 bg-[#C0C0C0]/10 px-3 py-1 text-xs font-medium capitalize text-[#F5F5F5]"
+                          >
+                            {order.status}
+                          </Badge>
+                          <span className="font-semibold text-[#C0C0C0]">
+                            {formatPrice(order.total_amount)}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
+                    ))
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Low Stock Alert */}
+            <Card className="overflow-hidden rounded-3xl border border-[#C0C0C0]/12 bg-[#171717] text-[#F5F5F5] shadow-[0_24px_70px_rgba(0,0,0,0.28)]">
+              <CardHeader className="border-b border-[#C0C0C0]/10 px-6 py-5">
+                <CardTitle className="flex items-center gap-3 text-xl font-semibold tracking-tight">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-[#C0C0C0]/14 bg-[#C0C0C0]/8">
+                    <Package className="h-5 w-5 text-[#C0C0C0]" />
+                  </span>
+                  Low Stock Alert
+                </CardTitle>
+              </CardHeader>
+
+              <CardContent className="px-6 py-5">
+                {stats.low_stock_products.length === 0 ? (
+                  <div className="rounded-2xl border border-[#C0C0C0]/10 bg-[#0B0B0B]/70 p-6 text-center">
+                    <p className="font-medium text-[#F5F5F5]">
+                      Inventory is healthy
+                    </p>
+                    <p className="mt-1 text-sm text-[#C0C0C0]/60">
+                      All products are well stocked.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {stats.low_stock_products.map((product) => (
+                      <div
+                        key={product.id}
+                        className="flex flex-col gap-3 rounded-2xl border border-[#C0C0C0]/10 bg-[#0B0B0B]/55 p-4 transition-all duration-300 hover:border-[#C0C0C0]/28 hover:bg-[#2A2A2A]/45 sm:flex-row sm:items-center sm:justify-between"
+                      >
+                        <div>
+                          <p className="font-semibold tracking-tight text-[#F5F5F5]">
+                            {product.name}
+                          </p>
+                          <p className="mt-1 text-sm text-[#C0C0C0]/55">
+                            {product.category}
+                          </p>
+                        </div>
+
                         <Badge
                           variant={
-                            order.status === "success"
-                              ? "default"
-                              : order.status === "failed"
-                              ? "destructive"
-                              : "secondary"
+                            product.quantity === 0 ? "destructive" : "secondary"
                           }
+                          className="w-fit rounded-full border border-[#C0C0C0]/16 bg-[#C0C0C0]/10 px-3 py-1 text-xs font-medium text-[#F5F5F5]"
                         >
-                          {order.status}
+                          {product.quantity === 0
+                            ? "Out of stock"
+                            : `${product.quantity} left`}
                         </Badge>
-                        <span className="font-medium">
-                          {formatPrice(order.total_amount)}
-                        </span>
                       </div>
-                    </div>
-                  ))
+                    ))}
+                  </div>
                 )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Low Stock Alert */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Package className="w-5 h-5" />
-                Low Stock Alert
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {stats.low_stock_products.length === 0 ? (
-                <p className="text-muted-foreground">
-                  All products are well stocked
-                </p>
-              ) : (
-                <div className="space-y-4">
-                  {stats.low_stock_products.map((product) => (
-                    <div
-                      key={product.id}
-                      className="flex items-center justify-between"
-                    >
-                      <div>
-                        <p className="font-medium">{product.name}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {product.category}
-                        </p>
-                      </div>
-                      <Badge
-                        variant={
-                          product.quantity === 0 ? "destructive" : "secondary"
-                        }
-                      >
-                        {product.quantity === 0
-                          ? "Out of stock"
-                          : `${product.quantity} left`}
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </>
